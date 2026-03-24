@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>바이브코딩 실전 가이드: 기획자가 30분 만에 앱을 만드는 법 – NextPlatform</title>
+<meta name="description" content="코딩 지식 없이 AI와 대화하듯 앱을 만드는 바이브코딩. 기획자가 30분 만에 실제 동작하는 웹앱을 만드는 실전 가이드.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1d27;
+    --surface: #1e2230;
+    --surface2: #252a3a;
+    --border: #2a2f42;
+    --accent: #5b8fff;
+    --accent2: #7fd4b3;
+    --accent3: #f4c97e;
+    --text: #e8ecf4;
+    --text2: #9ba3bc;
+    --text3: #6b7394;
+    --red: #ff6b6b;
+    --yellow: #f4c97e;
+    --green: #7fd4b3;
+    --serif: 'Noto Serif KR', Georgia, serif;
+    --sans: 'Noto Sans KR', sans-serif;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 15, 20, 0.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .site-logo {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .site-logo span { color: var(--text2); font-weight: 300; }
+  .header-meta {
+    font-size: 0.75rem;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(160deg, #131726 0%, #0d0f14 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(91,143,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(127,212,179,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-cats {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .cat-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .cat-tag.blue  { color: var(--accent); border-color: rgba(91,143,255,0.4); background: rgba(91,143,255,0.08); }
+  .cat-tag.green { color: var(--accent2); border-color: rgba(127,212,179,0.4); background: rgba(127,212,179,0.08); }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    word-break: keep-all;
+  }
+  .hero-byline {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text3);
+    font-size: 0.82rem;
+  }
+  .byline-author {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .author-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+  }
+  .author-info { display: flex; flex-direction: column; }
+  .author-name { color: var(--text2); font-weight: 500; font-size: 0.85rem; }
+  .author-certs { color: var(--text3); font-size: 0.72rem; font-family: var(--mono); }
+  .byline-sep { width: 1px; height: 30px; background: var(--border); }
+  .byline-date { font-family: var(--mono); }
+
+  /* ─── COVER IMAGE ─── */
+  .cover-image-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  .cover-image-wrap img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: block;
+    margin-top: -1.5rem;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  }
+
+  /* ─── ARTICLE LAYOUT ─── */
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 6rem;
+  }
+
+  /* ─── INFOGRAPHIC ─── */
+  .infographic-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 2rem 0 3rem;
+  }
+  .infographic-block img {
+    width: 100%;
+    display: block;
+  }
+  .infographic-block figcaption {
+    font-size: 0.75rem;
+    color: var(--text3);
+    text-align: center;
+    padding: 0.7rem 1rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .article-wrap h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    font-weight: 700;
+    color: var(--text);
+    margin: 3rem 0 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    word-break: keep-all;
+  }
+  .article-wrap h3 {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 2rem 0 0.8rem;
+    letter-spacing: 0.01em;
+    word-break: keep-all;
+  }
+  .article-wrap p {
+    color: var(--text2);
+    margin-bottom: 1.2rem;
+    word-break: keep-all;
+    line-height: 1.85;
+  }
+  .article-wrap strong { color: var(--text); font-weight: 700; }
+  .article-wrap a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(91,143,255,0.3); transition: border-color .2s; }
+  .article-wrap a:hover { border-color: var(--accent); }
+
+  .lead-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3.5vw, 1.85rem);
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.5;
+    margin: 1.5rem 0 2.5rem;
+    word-break: keep-all;
+  }
+
+  /* ─── BLOCKQUOTE / CALLOUT ─── */
+  blockquote, .callout {
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    color: var(--text2);
+    font-style: normal;
+  }
+  blockquote strong, .callout strong { color: var(--text); }
+  .callout-tip {
+    border-left-color: var(--accent2);
+    background: rgba(127,212,179,0.05);
+  }
+  .callout-tip code { color: var(--accent2); }
+  .callout-icon { font-size: 1.1rem; margin-right: 0.4rem; }
+
+  /* ─── SLIDE IMAGES ─── */
+  .slide-image {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 1.5rem 0 2rem;
+  }
+  .slide-image img { width: 100%; display: block; }
+  .slide-image figcaption {
+    font-size: 0.72rem;
+    color: var(--text3);
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+  }
+
+  /* ─── CODE BLOCKS ─── */
+  .code-block {
+    background: #0a0c12;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin: 1rem 0 1.5rem;
+    overflow-x: auto;
+    position: relative;
+  }
+  .code-block::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 8px; right: 12px;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .code-block pre {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #c9d1e0;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .code-block .cm { color: #6b7394; }  /* comment */
+  .code-block .kw { color: #5b8fff; }  /* keyword */
+  .code-block .st { color: #7fd4b3; }  /* string */
+  .code-block .br { color: #f4c97e; }  /* bracket label */
+
+  /* ─── PREP TABLE ─── */
+  .prep-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0 2rem;
+    font-size: 0.88rem;
+  }
+  .prep-table th {
+    background: var(--surface2);
+    color: var(--text3);
+    font-weight: 500;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .prep-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  .prep-table tr:last-child td { border-bottom: none; }
+  .prep-table td:first-child { color: var(--accent); font-weight: 600; }
+  .prep-table td .free-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    padding: 1px 7px;
+    border-radius: 3px;
+    background: rgba(127,212,179,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(127,212,179,0.3);
+    margin-left: 6px;
+  }
+  .prep-table td .paid-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    padding: 1px 7px;
+    border-radius: 3px;
+    background: rgba(244,201,126,0.08);
+    color: var(--accent3);
+    border: 1px solid rgba(244,201,126,0.3);
+    margin-left: 6px;
+  }
+
+  /* ─── STEP CARDS ─── */
+  .steps-grid { display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+  .step-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .25s;
+  }
+  .step-card:hover { border-color: rgba(91,143,255,0.4); }
+  .step-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .step-num .step-badge {
+    background: rgba(91,143,255,0.12);
+    border: 1px solid rgba(91,143,255,0.3);
+    border-radius: 3px;
+    padding: 1px 8px;
+  }
+  .step-card h3 {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 0.8rem;
+    letter-spacing: 0;
+  }
+  .step-card p { color: var(--text2); margin: 0; font-size: 0.9rem; }
+  .step-time {
+    position: absolute;
+    top: 1.2rem; right: 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text3);
+    background: var(--surface);
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  /* ─── TOOL COMPARISON TABLE ─── */
+  .tool-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0 2rem;
+    font-size: 0.88rem;
+  }
+  .tool-table th {
+    background: var(--surface2);
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .tool-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+  .tool-table tr:last-child td { border-bottom: none; }
+  .tool-table tr:hover td { background: rgba(255,255,255,0.015); }
+  .tool-name { color: var(--text); font-weight: 700; }
+
+  /* ─── LIMITS SECTION ─── */
+  .limits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+  }
+  @media (max-width: 600px) { .limits-grid { grid-template-columns: 1fr; } }
+  .limit-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.3rem;
+  }
+  .limit-card .limit-head {
+    font-weight: 700;
+    font-size: 0.82rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .limit-card.red .limit-head { color: var(--red); }
+  .limit-card.yellow .limit-head { color: var(--yellow); }
+  .limit-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .limit-card ul li {
+    font-size: 0.85rem;
+    color: var(--text2);
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+  .limit-card.red ul li::before { content: '✗'; position: absolute; left: 0; color: var(--red); font-size: 0.75rem; }
+  .limit-card.yellow ul li::before { content: '✓'; position: absolute; left: 0; color: var(--yellow); font-size: 0.75rem; }
+
+  /* ─── PROMPT FORMULA ─── */
+  .formula-box {
+    background: linear-gradient(135deg, rgba(91,143,255,0.05), rgba(127,212,179,0.05));
+    border: 1px solid rgba(91,143,255,0.25);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .formula-box .formula-title {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  /* ─── CLOSING CTA ─── */
+  .closing-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem 2rem;
+    margin: 3rem 0;
+    text-align: center;
+  }
+  .closing-cta p { color: var(--text2); font-size: 0.9rem; margin-bottom: 0; }
+
+  /* ─── RELATED POSTS ─── */
+  .related {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .related h4 {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .related-links { display: flex; flex-direction: column; gap: 0.6rem; }
+  .related-links a {
+    color: var(--text2);
+    font-size: 0.9rem;
+    border-bottom: none;
+    padding-left: 1rem;
+    position: relative;
+    transition: color .2s;
+    word-break: keep-all;
+  }
+  .related-links a::before {
+    content: '→';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+  .related-links a:hover { color: var(--text); }
+
+  /* ─── TAGS ─── */
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 2px 9px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── FOOTER ─── */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .site-footer a { color: var(--text3); text-decoration: none; border-bottom: 1px solid var(--border); }
+  .site-footer a:hover { color: var(--accent); }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-bar {
+    position: fixed;
+    top: 56px; left: 0;
+    height: 2px;
+    background: var(--accent);
+    width: 0%;
+    z-index: 200;
+    transition: width .1s linear;
+    box-shadow: 0 0 8px rgba(91,143,255,0.5);
+  }
+
+  /* ─── BACK TO TOP ─── */
+  .back-top {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s, background .2s;
+    text-decoration: none;
+    z-index: 99;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
+  .back-top:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    .hero { padding: 3.5rem 1.2rem 3rem; }
+    .article-wrap { padding: 2.5rem 1.2rem 4rem; }
+    .cover-image-wrap { padding: 0 1.2rem; }
+    .limits-grid { grid-template-columns: 1fr; }
+    .tool-table { font-size: 0.78rem; }
+    .prep-table { font-size: 0.78rem; }
+    .hero-byline { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .byline-sep { display: none; }
+    .step-time { position: static; margin-top: 0.3rem; display: inline-block; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-inner { animation: fadeUp .6s ease both; }
+  .cover-image-wrap { animation: fadeUp .7s .1s ease both; }
+  .article-wrap { animation: fadeUp .7s .15s ease both; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="https://nextplatform.net" class="site-logo">Next<span>Platform</span></a>
+    <span class="header-meta">AI Lab / Vibe Coding Lab</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-cats">
+      <span class="cat-tag blue">AI 기술 트렌드</span>
+      <span class="cat-tag green">Vibe Coding Lab</span>
+    </div>
+    <h1 class="hero-title">바이브코딩 실전 가이드: 기획자가 30분 만에 앱을 만드는 법</h1>
+    <div class="hero-byline">
+      <div class="byline-author">
+        <img class="author-avatar"
+          src="https://nextplatform.net/wp-content/uploads/2025/06/2506-JUN-STUDIO-2-ss.png"
+          alt="동준상 대표"
+          onerror="this.style.display='none'">
+        <div class="author-info">
+          <span class="author-name">동준상 · 넥스트플랫폼</span>
+          <span class="author-certs">AWS SAA · AWS AIF · GCP GenAI Leader</span>
+        </div>
+      </div>
+      <div class="byline-sep"></div>
+      <span class="byline-date">2026.03.23</span>
+    </div>
+  </div>
+</section>
+
+<!-- COVER IMAGE -->
+<div class="cover-image-wrap">
+  <img
+    src="https://nextplatform.net/wp-content/uploads/2026/03/2026-Vibe-Coding-Playbook-Post-Cover-by-NextPlatform.jpeg"
+    alt="2026 Vibe Coding Playbook Cover"
+    onerror="this.style.display='none'">
+</div>
+
+<!-- ARTICLE BODY -->
+<article class="article-wrap">
+
+  <!-- INFOGRAPHIC -->
+  <figure class="infographic-block">
+    <img
+      src="https://nextplatform.net/wp-content/uploads/2026/03/Vibecoding-magic-you-can-build-apps-in-thirty-minutes-infographic-by-NextPlatform-1024x572.jpg"
+      alt="바이브코딩 인포그래픽"
+      onerror="this.style.display='none'">
+    <figcaption>핵심 요약 인포그래픽 by NextPlatform</figcaption>
+  </figure>
+
+  <hr class="divider">
+
+  <p class="lead-quote">"코딩을 해본 적이 없다고요? 괜찮아요. 별 문제 아닙니다."</p>
+
+  <p>2026년, 가장 빠르게 퍼지고 있는 개발 방식이 있습니다. 이름은 <strong>바이브코딩(Vibe Coding)</strong>.</p>
+  <p>코딩을 배운 적 없는 기획자, 마케터, 컨설턴트들이 AI와 대화하듯 앱을 만들어내고 있습니다. 전문 개발자에게 의뢰하면 2주 걸릴 프로토타입을, 혼자서 30분 만에 완성하는 일이 실제로 일어나고 있습니다.</p>
+  <p>이 글은 <strong>"코딩은 전혀 모르지만 내 아이디어를 빠르게 앱으로 만들고 싶은"</strong> 분들을 위한 실전 가이드입니다.</p>
+
+  <hr class="divider">
+
+  <!-- SECTION 1 -->
+  <h2>바이브코딩이란 무엇인가?</h2>
+
+  <figure class="slide-image">
+    <img src="https://nextplatform.net/wp-content/uploads/2026/03/2026-Vibe-Coding-Playbook-Slide01-by-NextPlatform-1024x570.jpg" alt="Slide01" onerror="this.parentElement.style.display='none'">
+    <figcaption>2026 Vibe Coding Playbook – Slide 01</figcaption>
+  </figure>
+
+  <p>바이브코딩은 2025년 초 AI 연구자 <strong>안드레이 카르파티(Andrej Karpathy)</strong>가 처음 제안한 개념입니다. 핵심은 단순합니다.</p>
+
+  <blockquote>
+    <strong>"코드를 직접 쓰는 대신, AI에게 원하는 것을 말로 설명하고, AI가 만들어준 코드를 실행한다."</strong>
+  </blockquote>
+
+  <p>기존 개발 방식이 "악보를 보고 직접 연주하는 것"이라면, 바이브코딩은 "허밍으로 멜로디를 설명하면 AI가 악보를 써주고 연주까지 해주는 것"에 가깝습니다.</p>
+  <p>중요한 것은 <strong>코드의 문법이 아니라, 내가 원하는 것을 명확하게 설명하는 능력</strong>입니다. 기획자에게 유리한 게임입니다.</p>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <h2>왜 지금 기획자가 바이브코딩을 배워야 하는가?</h2>
+
+  <h3>① 아이디어 검증 속도가 달라진다</h3>
+  <p>기획서를 쓰고, 개발팀과 협의하고, 스프린트를 기다리고… 이 사이클에서 아이디어는 식어갑니다. 바이브코딩은 이 시간을 <strong>"생각 → 30분 → 동작하는 프로토타입"</strong>으로 압축합니다.</p>
+
+  <h3>② 개발자와의 소통이 근본적으로 달라진다</h3>
+  <p>직접 만들어본 사람은 "이게 왜 어려운지", "어디서 막히는지"를 압니다. 바이브코딩 경험 하나가 개발팀과의 수십 번의 대화를 바꿔놓습니다.</p>
+
+  <h3>③ AI 도구의 실력은 "쓴 횟수"에 비례한다</h3>
+  <p>ChatGPT나 Claude를 문서 요약에만 쓰는 것과, 앱을 만드는 데 쓰는 것은 완전히 다른 AI 경험입니다. 바이브코딩은 AI의 잠재력을 끝까지 끌어쓰는 훈련입니다.</p>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 — STEPS -->
+  <h2>실전: 30분 바이브코딩 세션 따라하기</h2>
+
+  <figure class="slide-image">
+    <img src="https://nextplatform.net/wp-content/uploads/2026/03/2026-Vibe-Coding-Playbook-Slide02-by-NextPlatform-1024x571.jpg" alt="Slide02" onerror="this.parentElement.style.display='none'">
+    <figcaption>2026 Vibe Coding Playbook – Slide 02</figcaption>
+  </figure>
+
+  <p>지금부터 <strong>"팀 일일 업무 체크리스트 웹앱"</strong>을 30분 만에 만들어보겠습니다. 코딩 지식 0%, AI만 있으면 됩니다.</p>
+
+  <h3>준비물</h3>
+  <table class="prep-table">
+    <thead>
+      <tr>
+        <th>도구</th>
+        <th>용도</th>
+        <th>비용</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="https://claude.ai" target="_blank" rel="noopener">Claude.ai</a></td>
+        <td>기획 → 코드 생성</td>
+        <td>무료<span class="paid-badge">유료</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://bolt.new" target="_blank" rel="noopener">Bolt.new</a></td>
+        <td>코드 → 즉시 실행</td>
+        <td><span class="free-badge">무료</span></td>
+      </tr>
+      <tr>
+        <td>브라우저</td>
+        <td>그게 전부</td>
+        <td><span class="free-badge">무료</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">💡</span>
+    <strong>Bolt.new</strong> 대신 <strong>v0.dev(Vercel)</strong>, <strong>Replit</strong>, <strong>Lovable</strong> 등을 써도 됩니다. 원리는 같습니다.
+  </div>
+
+  <div class="steps-grid">
+
+    <div class="step-card">
+      <div class="step-num"><span class="step-badge">STEP 1</span></div>
+      <h3>아이디어를 "AI가 이해할 수 있는 말"로 정리하기</h3>
+      <span class="step-time">⏱ 5분</span>
+      <p>바이브코딩에서 가장 중요한 단계입니다. <strong>프롬프트 설계</strong>라고도 부릅니다. 막연하게 "앱 만들어줘"가 아니라, 아래 구조로 설명해야 합니다.</p>
+      <div class="code-block" data-lang="prompt">
+        <pre>[목적] 이 앱은 무엇을 위한 것인가?
+[사용자] 누가 사용하는가?
+[핵심 기능] 꼭 있어야 할 기능 3가지는?
+[참고 UI] 어떤 앱과 비슷하게 만들고 싶은가?</pre>
+      </div>
+      <p><strong>예시 프롬프트:</strong></p>
+      <div class="code-block" data-lang="예시">
+        <pre>팀원 5명이 매일 아침 자신의 오늘 업무 3가지를 입력하고,
+오른쪽에 팀 전체 현황이 한눈에 보이는 웹앱을 만들어줘.
+디자인은 Notion처럼 깔끔하게, 완료한 업무는 취소선으로 표시해줘.
+React로 만들고, 새로고침해도 데이터가 유지되도록 로컬 스토리지를 써줘.</pre>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num"><span class="step-badge">STEP 2</span></div>
+      <h3>Claude에서 코드 초안 받기</h3>
+      <span class="step-time">⏱ 5분</span>
+      <p><a href="https://claude.ai" target="_blank" rel="noopener">Claude.ai</a>에 접속해 위 프롬프트를 그대로 붙여넣습니다. Claude는 완성된 React 컴포넌트 코드를 만들어줍니다. 이 단계에서 <strong>코드를 이해할 필요가 없습니다.</strong> 그냥 복사합니다.</p>
+      <div class="callout callout-tip">
+        <span class="callout-icon">✅</span>
+        <strong>팁:</strong> "코드 전체를 하나의 파일로 만들어줘"라고 추가하면 나중에 훨씬 편합니다.
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num"><span class="step-badge">STEP 3</span></div>
+      <h3>Bolt.new에서 즉시 실행하기</h3>
+      <span class="step-time">⏱ 10분</span>
+      <p>
+        1. <a href="https://bolt.new" target="_blank" rel="noopener">bolt.new</a>에 접속합니다.<br>
+        2. 채팅창에 STEP 1의 프롬프트를 그대로 입력합니다.<br>
+        3. 우측 미리보기 창에 앱이 실시간으로 생성됩니다.
+      </p>
+      <blockquote style="margin-top:1rem;">
+        <strong>30초 만에 동작하는 앱이 눈앞에 나타납니다.</strong>
+      </blockquote>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num"><span class="step-badge">STEP 4</span></div>
+      <h3>원하는 대로 수정하기</h3>
+      <span class="step-time">⏱ 10분</span>
+      <p>만들어진 앱이 마음에 들지 않는 부분이 있다면, <strong>다시 말로 설명하면 됩니다.</strong></p>
+      <div class="code-block" data-lang="수정 예시">
+        <pre>버튼 색상을 파란색으로 바꿔줘.
+팀원 이름을 클릭하면 해당 팀원의 업무만 필터링되게 해줘.
+완료율을 퍼센트로 상단에 보여줘.</pre>
+      </div>
+      <p>이 과정을 <strong>"반복적 프롬프팅(Iterative Prompting)"</strong>이라고 합니다. 수정 → 확인 → 수정의 사이클이 빠르게 돌아갈수록 완성도가 높아집니다.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-num"><span class="step-badge">STEP 5</span></div>
+      <h3>배포 또는 공유</h3>
+      <span class="step-time">⏱ 5분 이내</span>
+      <p>Bolt.new는 만들어진 앱을 <strong>원클릭으로 웹 주소(URL)로 배포</strong>할 수 있습니다. 팀원에게 링크만 공유하면 바로 사용할 수 있습니다.</p>
+      <blockquote style="margin-top:1rem;">
+        🎉 <strong>총 소요 시간: 30분. 결과물: 실제로 동작하는 웹앱.</strong>
+      </blockquote>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 — TOOLS -->
+  <h2>바이브코딩 도구 비교: 어떤 걸 써야 할까?</h2>
+
+  <table class="tool-table">
+    <thead>
+      <tr>
+        <th>도구</th>
+        <th>특징</th>
+        <th>추천 대상</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tool-name">Bolt.new</td>
+        <td>빠른 실행, 즉시 배포</td>
+        <td>처음 시작하는 분</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Lovable</td>
+        <td>UI 완성도 높음</td>
+        <td>디자인이 중요한 경우</td>
+      </tr>
+      <tr>
+        <td class="tool-name">v0.dev</td>
+        <td>Vercel 생태계 연동</td>
+        <td>실제 서비스화 고려 시</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Replit</td>
+        <td>협업, 다양한 언어</td>
+        <td>팀 프로젝트</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Cursor</td>
+        <td>코드 편집기 기반, 강력한 AI</td>
+        <td>개발 경험 조금 있는 분</td>
+      </tr>
+      <tr>
+        <td class="tool-name">Claude + 직접 실행</td>
+        <td>가장 유연, 학습 효과 큼</td>
+        <td>AI를 깊이 이해하고 싶은 분</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider">
+
+  <!-- SECTION 5 — LIMITS -->
+  <h2>바이브코딩의 한계와 현실적인 조언</h2>
+  <p>바이브코딩이 만능은 아닙니다. 솔직하게 짚어드립니다.</p>
+
+  <div class="limits-grid">
+    <div class="limit-card red">
+      <div class="limit-head">🔴 이런 건 아직 어렵습니다</div>
+      <ul>
+        <li>복잡한 데이터베이스 구조가 필요한 서비스</li>
+        <li>보안이 중요한 금융·의료 앱</li>
+        <li>수만 명이 동시 접속하는 대형 서비스</li>
+      </ul>
+    </div>
+    <div class="limit-card yellow">
+      <div class="limit-head">🟡 이런 건 잘 됩니다</div>
+      <ul>
+        <li>내부 업무 도구, 팀 대시보드</li>
+        <li>아이디어 프로토타입, MVP 검증</li>
+        <li>간단한 계산기, 체크리스트, 폼 앱</li>
+        <li>고객 제안용 데모</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">💡</span>
+    <strong>바이브코딩은 "완성된 제품"을 만드는 도구가 아니라, "빠르게 검증"하는 도구입니다.</strong> 아이디어가 살아남으면 그때 제대로 개발하면 됩니다.
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 6 — FORMULA -->
+  <h2>기획자를 위한 바이브코딩 프롬프트 공식</h2>
+
+  <figure class="slide-image">
+    <img src="https://nextplatform.net/wp-content/uploads/2026/03/2026-Vibe-Coding-Playbook-Slide03-by-NextPlatform-1024x570.jpg" alt="Slide03" onerror="this.parentElement.style.display='none'">
+    <figcaption>2026 Vibe Coding Playbook – Slide 03</figcaption>
+  </figure>
+
+  <p>14년간 강연 현장에서 확인한 공식입니다. 이것만 기억해도 됩니다.</p>
+
+  <div class="formula-box">
+    <div class="formula-title">▸ 바이브코딩 마스터 프롬프트</div>
+    <div class="code-block" data-lang="공식" style="margin:0; background:#0a0c12;">
+      <pre>[역할] 너는 숙련된 프론트엔드 개발자야.
+[목표] [구체적인 앱 설명]을 만들어줘.
+[기술] React, Tailwind CSS 사용. 외부 API 없이 완성해줘.
+[UX]  [레퍼런스 앱]처럼 직관적으로 만들어줘.
+[조건] 코드는 파일 하나로, 바로 실행 가능하게 해줘.</pre>
+    </div>
+  </div>
+
+  <p>처음에는 이 틀을 그대로 복사해서 사용하세요. 익숙해지면 자신만의 방식으로 발전시켜 나가면 됩니다.</p>
+
+  <hr class="divider">
+
+  <!-- SECTION 7 — CLOSING -->
+  <h2>마치며: 코딩을 배우는 게 아니라, AI를 쓰는 법을 배우는 것</h2>
+
+  <figure class="slide-image">
+    <img src="https://nextplatform.net/wp-content/uploads/2026/03/2026-Vibe-Coding-Playbook-Slide04-by-NextPlatform-1024x571.jpg" alt="Slide04" onerror="this.parentElement.style.display='none'">
+    <figcaption>2026 Vibe Coding Playbook – Slide 04</figcaption>
+  </figure>
+
+  <p>바이브코딩의 본질은 <strong>"코딩 능력"이 아니라 "AI와 협업하는 능력"</strong>입니다.</p>
+  <p>앞으로의 경쟁력은 프로그래밍 언어를 얼마나 잘 아느냐가 아니라, <strong>자신의 아이디어를 AI가 실행할 수 있는 언어로 얼마나 잘 표현하느냐</strong>에 달려 있습니다.</p>
+
+  <div class="closing-cta">
+    <p>오늘, 딱 30분만 투자해보세요. 처음 만들어진 앱이 허술해도 괜찮습니다.<br>그 경험이 여러분의 다음 아이디어를 현실로 만드는 출발점이 됩니다.</p>
+  </div>
+
+  <blockquote>
+    <strong>다음 편에서는:</strong> 바이브코딩으로 만든 앱을 실제 서비스로 발전시키는 방법을 다룹니다.
+  </blockquote>
+
+  <hr class="divider">
+
+  <h2>참고자료 및 다운로드</h2>
+  <p>
+    📄 <strong>2026 Vibe Coding Playbook – Slides by NextPlatform</strong><br>
+    <a href="https://drive.google.com/file/d/1nL9o1gReWcnzoJLUp1ydrcEe62Fw5NSJ/view?usp=sharing" target="_blank" rel="noopener">Google Drive에서 다운로드</a>
+  </p>
+
+  <hr class="divider">
+
+  <!-- TAGS -->
+  <div class="tags-wrap">
+    <span class="tag">#바이브코딩</span>
+    <span class="tag">#VibeCoding</span>
+    <span class="tag">#AI코딩</span>
+    <span class="tag">#노코드</span>
+    <span class="tag">#기획자</span>
+    <span class="tag">#Claude</span>
+    <span class="tag">#Cursor</span>
+    <span class="tag">#프로토타입</span>
+    <span class="tag">#바이브코딩항해일지</span>
+    <span class="tag">#에이콘바이브코딩</span>
+    <span class="tag">#동준상바이브코딩</span>
+  </div>
+
+  <!-- RELATED POSTS -->
+  <div class="related">
+    <h4>관련 글</h4>
+    <div class="related-links">
+      <a href="https://nextplatform.net/agents-md-for-ai-coding-agent/" target="_blank" rel="noopener">
+        베스트 AI 코딩 | 바이브코딩 에이전트를 위한 agents.md 작성 가이드 및 예시
+      </a>
+      <a href="https://nextplatform.net/essential-modern-app-components-for-vibecoding/" target="_blank" rel="noopener">
+        바이브코딩 | 상용 애플리케이션의 세부 요소를 구현하기 위한 모범적인 프롬프트 엔지니어링
+      </a>
+      <a href="https://nextplatform.net/advanced-ai-agents-design-patterns-loop-coordinator-agent-as-tool/" target="_blank" rel="noopener">
+        고성능 AI 에이전트 설계 패턴 TOP 3
+      </a>
+      <a href="https://nextplatform.net/building-a-daily-morning-information-delivery-agent-with-claude-cowork/" target="_blank" rel="noopener">
+        Claude Cowork 핸즈온 | 매일 아침 정보 배달 에이전트 만들기
+      </a>
+    </div>
+  </div>
+
+  <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--border); font-size:0.82rem; color:var(--text3); line-height:1.7;">
+    이 글이 도움이 되셨다면, 주변의 기획자·마케터 동료에게 공유해주세요.<br>
+    넥스트플랫폼은 AI로 삶을 이롭게 하는 콘텐츠를 매주 3회 발행합니다.
+  </div>
+
+</article>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  넥스트플랫폼 / 대표자: 동준상 / <a href="mailto:naebon@naver.com">naebon@naver.com</a><br>
+  <span style="margin-top:0.3rem;display:inline-block;">
+    © 2026 <a href="https://nextplatform.net" target="_blank">nextplatform.net</a>
+  </span>
+</footer>
+
+<a class="back-top" href="#" id="backTop" title="맨 위로">↑</a>
+
+<script>
+  // Progress bar
+  const bar = document.getElementById('progressBar');
+  const btn = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (scrolled / total * 100) + '%';
+    btn.classList.toggle('visible', scrolled > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
